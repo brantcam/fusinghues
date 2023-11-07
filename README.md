@@ -76,3 +76,4 @@ Find the loadLevel() function, in there you can see a switch statment with the 1
 * There are no parramaters for a boss, they always spawn in the same place and have 3 lives. Tweak the values of Boss.h to modify
 
 Feel free to edit, comment on the YouTube video (link at top) if you have any questions.
+# fusinghues
