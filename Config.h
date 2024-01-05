@@ -1,5 +1,5 @@
 // LED setup
-int const NUM_LEDS = 300;           // set to 300
+int const NUM_LEDS = 30;           // set to 300
 int const DATA_PIN = 3;
 int const CLOCK_PIN = 4;     
 int const BRIGHTNESS = 150;        //Use a lower value for lower current power supplies(<2 amps)

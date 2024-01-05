@@ -176,14 +176,14 @@ void loop() {
                 }   
               }
             } else if (stageStartTime+4000 > mm) {
-              int n0 = max(map((mm-stageStartTime), 1500, 4000, 0, getLED(playerPool[0].pos)), 0); // 0 -> 1500 ms ====> 0 -> player1.pos
-              int n1 = max(map((mm-stageStartTime), 1500, 4000, 0, NUM_LEDS-getLED(playerPool[0].pos-1)), 0); // 0 -> 1500 ms ====> player1.pos -> NUM_LEDS
+              int n0 = max(map((mm-stageStartTime), 1500, 4000, 0, getLED(playerPool[0].pos)), 0);
+              int n1 = max(map((mm-stageStartTime), 1500, 4000, 0, NUM_LEDS-getLED(playerPool[0].pos-1)), 0);
               int left = 0;
               int right = 0;
               while (left < n0 || right < n1) {
                 brightness = 255;
-                leds[right] = CRGB(playerPool[0].r+playerPool[1].r, playerPool[0].g+playerPool[1].g, playerPool[0].b+playerPool[1].b);
-                leds[NUM_LEDS-left-1] = CRGB(playerPool[0].r+playerPool[1].r, playerPool[0].g+playerPool[1].g, playerPool[0].b+playerPool[1].b);
+                leds[getLED(playerPool[0].pos)-left] = CRGB(playerPool[0].r+playerPool[1].r, playerPool[0].g+playerPool[1].g, playerPool[0].b+playerPool[1].b);
+                leds[getLED(playerPool[0].pos)+right] = CRGB(playerPool[0].r+playerPool[1].r, playerPool[0].g+playerPool[1].g, playerPool[0].b+playerPool[1].b);
                 if (left < n0) {
                   left++;
                 }
@@ -242,56 +242,56 @@ void loadLevel(){
     switch(levelNumber){
         case 0:
             break;
-        case 1:
-            // Slow moving Sin enemy
-            spawnEnemy(500, 1, 5, 250);
-            break;
-        case 2:
-            spawnPool[0].Spawn(350, 3000, 2, 0, 0);
-            spawnPool[1].Spawn(550, 3000, 2, 1, 0);
-            break;
-        case 3:
-            // Lava intro
-            spawnLava(400, 490, 2000, 2000, 0, "OFF");
-//            spawnPool[0].Spawn(1000, 5500, 3, 0, 0);
-            break;
-        case 4:
-            // Sin enemy
-            spawnEnemy(700, 1, 7, 275);
-            spawnEnemy(500, 1, 5, 250);
-            break;
-        case 5:
-            // Conveyor
-            spawnConveyor(100, 600, -1);
+//        case 1:
+//            // Slow moving Sin enemy
+//            spawnEnemy(500, 1, 5, 250);
+//            break;
+//        case 2:
+//            spawnPool[0].Spawn(350, 3000, 2, 0, 0);
+//            spawnPool[1].Spawn(550, 3000, 2, 1, 0);
+//            break;
+//        case 3:
+//            // Lava intro
+//            spawnLava(400, 490, 2000, 2000, 0, "OFF");
+////            spawnPool[0].Spawn(1000, 5500, 3, 0, 0);
+//            break;
+//        case 4:
+//            // Sin enemy
+//            spawnEnemy(700, 1, 7, 275);
+//            spawnEnemy(500, 1, 5, 250);
+//            break;
+//        case 5:
+//            // Conveyor
+//            spawnConveyor(100, 600, -1);
+////            spawnEnemy(800, 0, 0, 0);
+//            break;
+//        case 6:
+//            // Conveyor of enemies
+//            spawnConveyor(50, 1000, 1);
+//            spawnEnemy(300, 0, 0, 0);
+//            spawnEnemy(400, 0, 0, 0);
+//            spawnEnemy(500, 0, 0, 0);
+//            spawnEnemy(600, 0, 0, 0);
+//            spawnEnemy(700, 0, 0, 0);
 //            spawnEnemy(800, 0, 0, 0);
-            break;
-        case 6:
-            // Conveyor of enemies
-            spawnConveyor(50, 1000, 1);
-            spawnEnemy(300, 0, 0, 0);
-            spawnEnemy(400, 0, 0, 0);
-            spawnEnemy(500, 0, 0, 0);
-            spawnEnemy(600, 0, 0, 0);
-            spawnEnemy(700, 0, 0, 0);
-            spawnEnemy(800, 0, 0, 0);
-            spawnEnemy(900, 0, 0, 0);
-            break;
-        case 7:
-            // Lava run
-            spawnLava(195, 300, 2000, 2000, 0, "OFF");
-            spawnLava(350, 455, 2000, 2000, 0, "OFF");
-            spawnLava(510, 610, 2000, 2000, 0, "OFF");
-            spawnLava(660, 760, 2000, 2000, 0, "OFF");
-            spawnPool[0].Spawn(1000, 3800, 4, 0, 0);
-            break;
-        case 8:
-            // Sin enemy #2
-            spawnEnemy(700, 1, 7, 275);
-            spawnEnemy(500, 1, 5, 250);
-            spawnPool[0].Spawn(1000, 5500, 4, 0, 3000);
-            spawnPool[1].Spawn(0, 5500, 5, 1, 10000);
-            spawnConveyor(100, 900, -1);
-            break;
+//            spawnEnemy(900, 0, 0, 0);
+//            break;
+//        case 7:
+//            // Lava run
+//            spawnLava(195, 300, 2000, 2000, 0, "OFF");
+//            spawnLava(350, 455, 2000, 2000, 0, "OFF");
+//            spawnLava(510, 610, 2000, 2000, 0, "OFF");
+//            spawnLava(660, 760, 2000, 2000, 0, "OFF");
+//            spawnPool[0].Spawn(1000, 3800, 4, 0, 0);
+//            break;
+//        case 8:
+//            // Sin enemy #2
+//            spawnEnemy(700, 1, 7, 275);
+//            spawnEnemy(500, 1, 5, 250);
+//            spawnPool[0].Spawn(1000, 5500, 4, 0, 3000);
+//            spawnPool[1].Spawn(0, 5500, 5, 1, 10000);
+//            spawnConveyor(100, 900, -1);
+//            break;
         case 9:
             // Boss
             spawnBoss();
