@@ -242,29 +242,43 @@ void loadLevel(){
     switch(levelNumber){
         case 0:
             break;
-//        case 1:
-//            // Slow moving Sin enemy
-//            spawnEnemy(500, 1, 5, 250);
-//            break;
-//        case 2:
-//            spawnPool[0].Spawn(350, 3000, 2, 0, 0);
-//            spawnPool[1].Spawn(550, 3000, 2, 1, 0);
-//            break;
-//        case 3:
-//            // Lava intro
-//            spawnLava(400, 490, 2000, 2000, 0, "OFF");
-////            spawnPool[0].Spawn(1000, 5500, 3, 0, 0);
-//            break;
-//        case 4:
-//            // Sin enemy
-//            spawnEnemy(700, 1, 7, 275);
-//            spawnEnemy(500, 1, 5, 250);
-//            break;
-//        case 5:
-//            // Conveyor
+        case 1:
+            // Slow moving sin enemies
+            spawnEnemy(300, 1, 1, 250);
+            spawnEnemy(600, 1, 1, 250);
+            break;
+        case 2:
+            // lava, spawner (left), lava, sin enemy, sin enemy, lava, spawner (right), lava
+            spawnLava(100, 200, 2000, 2000, 0, "OFF");
+            spawnPool[0].Spawn(250, 3000, 2, 0, 0);
+            spawnLava(300, 400, 2000, 2000, 0, "ON");
+            spawnEnemy(450, 1, 3, 250);
+            spawnEnemy(550, 1, 3, 250);
+            spawnLava(600, 700, 2000, 2000, 0, "ON");
+            spawnPool[1].Spawn(750, 3000, 2, 1, 0);
+            spawnLava(800, 900, 2000, 2000, 0, "OFF");
+            break;
+        case 3:
+            // water (right), water (left), spawner (left), spawner (right), water (left), water (right) 
+            spawnConveyor(100, 200, 1);
+            spawnConveyor(300, 400, -1);
+
+            spawnPool[0].Spawn(450, 3000, 3, 0, 0);
+            spawnPool[1].Spawn(550, 3000, 3, 1, 0);
+
+            spawnConveyor(600, 700, -1);
+            spawnConveyor(800, 900, 1);
+            break;
+        case 4:
+            // need to playtest other levels before design
+            spawnEnemy(700, 1, 7, 275);
+            spawnEnemy(500, 1, 5, 250);
+            break;
+        case 5:
+            // boss level
 //            spawnConveyor(100, 600, -1);
-////            spawnEnemy(800, 0, 0, 0);
-//            break;
+//            spawnEnemy(800, 0, 0, 0);
+            break;
 //        case 6:
 //            // Conveyor of enemies
 //            spawnConveyor(50, 1000, 1);
@@ -292,10 +306,10 @@ void loadLevel(){
 //            spawnPool[1].Spawn(0, 5500, 5, 1, 10000);
 //            spawnConveyor(100, 900, -1);
 //            break;
-        case 9:
-            // Boss
-            spawnBoss();
-            break;
+//        case 9:
+//            // Boss
+//            spawnBoss();
+//            break;
     }
     stageStartTime = millis();
     stage = "PLAY";

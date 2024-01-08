@@ -1,5 +1,5 @@
 // LED setup
-int const NUM_LEDS = 30;           // set to 300
+int const NUM_LEDS = 300;           // set to 300
 int const DATA_PIN = 3;
 int const CLOCK_PIN = 4;     
 int const BRIGHTNESS = 150;        //Use a lower value for lower current power supplies(<2 amps)
@@ -14,7 +14,7 @@ long previousMillis = 0;           // Time of the last redraw
 int levelNumber = 0;
 long lastInputTime = 0;
 int const TIMEOUT = 30000;
-int const LEVEL_COUNT = 1;
+int const LEVEL_COUNT = 5;
 iSin isin = iSin();
 
 // JOYSTICK
