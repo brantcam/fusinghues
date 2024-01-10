@@ -38,12 +38,6 @@ void setup() {
     FastLED.setMaxPowerInVoltsAndMilliamps(12, 10000);
     FastLED.setBrightness(BRIGHTNESS);
     FastLED.setDither(1);
-    
-    // Life LEDs
-    for (int i = 0; i<3; i++){
-        pinMode(lifeLEDs[i], OUTPUT);
-        digitalWrite(lifeLEDs[i], HIGH);
-    }
 
     // particle
     for (int i = 0; i < particleCount; i++) {
@@ -141,14 +135,40 @@ void loop() {
               }
             }
             FastLED.clear();
+            leds[146] = CRGB(255, 40, 0);
+            leds[147] = CRGB(255, 80, 0);
+            leds[148] = CRGB(255, 108, 0);
+            leds[149] = CRGB(255, 118, 0);
+            leds[150] = CRGB(255, 128, 0);
+            leds[151] = CRGB(255, 255, 0);
+            leds[152] = CRGB(128, 255, 0);
+            leds[153] = CRGB(118, 255, 0);
+            leds[154] = CRGB(108, 255, 0);
+            leds[154] = CRGB(80, 255, 0);
+            leds[155] = CRGB(40, 255, 0);
+            leds[getLED(400)] = CRGB(255, 255, 255);
+            leds[getLED(600)] = CRGB(255, 255, 255);
             tickConveyors();
             tickSpawners();
             tickBoss();
             tickLava();
             tickEnemies();
+            
             for (int i = 0; i < playerCount; i ++) {
               drawPlayer(playerPool[i]);
               drawAttack(playerPool[i]);
+            }
+            // this is a condition for the last level, it needs to make rainbows, set this value to the last level
+            if (levelNumber == 1) {
+              leds[getLED(playerPool[0].pos)].setHSV(0, 255, 255);
+              leds[getLED(playerPool[1].pos)].setHSV(0, 255, 255);
+
+              for (int i = getLED(playerPool[0].pos); i > 0; i --) {
+                leds[i].setHSV(map(abs(i-getLED(playerPool[0].pos)), 0, NUM_LEDS, 0, 255), 255, 255);
+              }
+              for (int i = getLED(playerPool[1].pos); i < NUM_LEDS; i ++) {
+                leds[i].setHSV(map(abs(i-getLED(playerPool[1].pos)-NUM_LEDS), 0, NUM_LEDS, 0, 255), 255, 255);
+              }
             }
         }else if(stage == "DEAD"){
             // DEAD
@@ -160,6 +180,7 @@ void loop() {
             // LEVEL COMPLETE
             FastLED.clear();
             if (stageStartTime+1500 > mm) {
+              // lights come together
               int n0 = max(map((mm-stageStartTime), 0, 1500, 0, getLED(playerPool[0].pos)), 0); // 0 -> 1500 ms ====> 0 -> player1.pos
               int n1 = max(map((mm-stageStartTime), 0, 1500, 0, NUM_LEDS-getLED(playerPool[0].pos-1)), 0); // 0 -> 1500 ms ====> player1.pos -> NUM_LEDS
               int left = 0;
@@ -176,12 +197,14 @@ void loop() {
                 }   
               }
             } else if (stageStartTime+4000 > mm) {
+              // lights explode apart
               int n0 = max(map((mm-stageStartTime), 1500, 4000, 0, getLED(playerPool[0].pos)), 0);
               int n1 = max(map((mm-stageStartTime), 1500, 4000, 0, NUM_LEDS-getLED(playerPool[0].pos-1)), 0);
               int left = 0;
               int right = 0;
               while (left < n0 || right < n1) {
                 brightness = 255;
+                fusingHues();
                 leds[getLED(playerPool[0].pos)-left] = CRGB(playerPool[0].r+playerPool[1].r, playerPool[0].g+playerPool[1].g, playerPool[0].b+playerPool[1].b);
                 leds[getLED(playerPool[0].pos)+right] = CRGB(playerPool[0].r+playerPool[1].r, playerPool[0].g+playerPool[1].g, playerPool[0].b+playerPool[1].b);
                 if (left < n0) {
@@ -200,18 +223,18 @@ void loop() {
                 int n = max(map(((mm-stageStartTime)), 0, 500, NUM_LEDS, 0), 0);
                 for(int i = NUM_LEDS; i>= n; i--){
                     brightness = (sin(((i*10)+mm)/500.0)+1)*255;
-                    leds[i].setHSV(brightness, 255, 50);
+                    leds[i].setHSV(brightness, 255, 255);
                 }
             }else if(stageStartTime+5000 > mm){
                 for(int i = NUM_LEDS; i>= 0; i--){
                     brightness = (sin(((i*10)+mm)/500.0)+1)*255;
-                    leds[i].setHSV(brightness, 255, 50);
+                    leds[i].setHSV(brightness, 255, 255);
                 }
             }else if(stageStartTime+5500 > mm){
                 int n = max(map(((mm-stageStartTime)), 5000, 5500, NUM_LEDS, 0), 0);
                 for(int i = 0; i< n; i++){
                     brightness = (sin(((i*10)+mm)/500.0)+1)*255;
-                    leds[i].setHSV(brightness, 255, 50);
+                    leds[i].setHSV(brightness, 255, 255);
                 }
             }else{
                 nextLevel();
@@ -241,44 +264,63 @@ void loadLevel(){
     }
     switch(levelNumber){
         case 0:
+            playerPool[0].setRGBValues(255, 0, 0);
+            playerPool[1].setRGBValues(0, 255, 0);
+            
             break;
+//        case 1:
+//            // Slow moving sin enemies
+//            playerPool[0].setRGBValues(0, 0, 255);
+//            playerPool[1].setRGBValues(255, 0, 0);
+//
+//            spawnEnemy(300, -1, 1, 50);
+//            spawnEnemy(600, 1, 1, 50);
+//            break;
+//        case 2:
+//            playerPool[0].setRGBValues(0, 255, 0);
+//            playerPool[1].setRGBValues(0, 0, 255);
+//            spawnLava(100, 200, 2000, 2000, 0, "OFF");
+//            spawnLava(300, 400, 2000, 2000, 0, "ON");
+//            spawnEnemy(475, -1, 2, 50);
+//            spawnEnemy(525, 1, 2, 50);
+//            spawnLava(600, 700, 2000, 2000, 0, "ON");
+//            spawnLava(800, 900, 2000, 2000, 0, "OFF");
+//            break;
+//        case 3:
+//            playerPool[0].setRGBValues(255, 0, 0);
+//            playerPool[1].setRGBValues(0, 255, 0);
+//            spawnConveyor(100, 300, 1);
+//
+//            spawnPool[0].Spawn(450, 3000, 2, 0, 0);
+//            spawnPool[1].Spawn(550, 3000, 2, 1, 0);
+//
+//            spawnConveyor(700, 900, -1);
+//            break;
+//        case 4:
+//            playerPool[0].setRGBValues(0, 0, 255);
+//            playerPool[1].setRGBValues(255, 0, 0);
+//            spawnConveyor(25, 100, 1);
+//            spawnLava(100, 150, 2000, 2000, 0, "ON");
+//            spawnPool[0].Spawn(275, 3000, 5, 0, 0);
+//            spawnConveyor(300, 400, 1);
+//
+//            spawnLava(400, 600, 2000, 2000, 0, "OFF");
+//
+//            spawnConveyor(600, 700, -1);
+//            spawnPool[1].Spawn(725, 3000, 5, 1, 0);
+//            spawnLava(850, 900, 2000, 2000, 0, "ON");
+//            spawnConveyor(900, 975, -1);
+//            break;
         case 1:
-            // Slow moving sin enemies
-            spawnEnemy(300, 1, 1, 250);
-            spawnEnemy(600, 1, 1, 250);
+            playerPool[0].setRGBValues(255, 0, 0);
+            playerPool[1].setRGBValues(0, 255, 0);
+            
             break;
-        case 2:
-            // lava, spawner (left), lava, sin enemy, sin enemy, lava, spawner (right), lava
-            spawnLava(100, 200, 2000, 2000, 0, "OFF");
-            spawnPool[0].Spawn(250, 3000, 2, 0, 0);
-            spawnLava(300, 400, 2000, 2000, 0, "ON");
-            spawnEnemy(450, 1, 3, 250);
-            spawnEnemy(550, 1, 3, 250);
-            spawnLava(600, 700, 2000, 2000, 0, "ON");
-            spawnPool[1].Spawn(750, 3000, 2, 1, 0);
-            spawnLava(800, 900, 2000, 2000, 0, "OFF");
-            break;
-        case 3:
-            // water (right), water (left), spawner (left), spawner (right), water (left), water (right) 
-            spawnConveyor(100, 200, 1);
-            spawnConveyor(300, 400, -1);
-
-            spawnPool[0].Spawn(450, 3000, 3, 0, 0);
-            spawnPool[1].Spawn(550, 3000, 3, 1, 0);
-
-            spawnConveyor(600, 700, -1);
-            spawnConveyor(800, 900, 1);
-            break;
-        case 4:
-            // need to playtest other levels before design
-            spawnEnemy(700, 1, 7, 275);
-            spawnEnemy(500, 1, 5, 250);
-            break;
-        case 5:
-            // boss level
-//            spawnConveyor(100, 600, -1);
-//            spawnEnemy(800, 0, 0, 0);
-            break;
+//        case 5:
+//            // boss level
+////            spawnConveyor(100, 600, -1);
+////            spawnEnemy(800, 0, 0, 0);
+//            break;
 //        case 6:
 //            // Conveyor of enemies
 //            spawnConveyor(50, 1000, 1);
@@ -378,7 +420,7 @@ void levelComplete(){
     stageStartTime = millis();
     stage = "WIN";
     if(levelNumber == LEVEL_COUNT) stage = "COMPLETE";
-    lives = 3;
+    lives = LIFE_TOTAL;
 }
 
 void nextLevel(){
@@ -397,7 +439,7 @@ void die(Player player) {
     if(levelNumber > 0) lives --;
     if(lives == 0){
         levelNumber = 0;
-        lives = 3;
+        lives = LIFE_TOTAL;
     }
     for(int p = 0; p < particleCount; p++){
         particlePool[p].Spawn(player.pos);
@@ -482,7 +524,7 @@ void tickSpawners(){
     long mm = millis();
     for(int s = 0; s<spawnCount; s++){
         if (spawnPool[s].Alive()) {
-          leds[getLED(spawnPool[s]._pos)] = CRGB(255, 165, 0);
+          leds[getLED(spawnPool[s]._pos)] = CRGB(238, 130, 238);
         }
         if(spawnPool[s].Alive() && spawnPool[s]._activate < mm){
             if(spawnPool[s]._lastSpawned + spawnPool[s]._rate < mm || spawnPool[s]._lastSpawned == 0){
@@ -499,12 +541,9 @@ void tickSpawners(){
           }
           // CHECK FOR ATTACK
           if(playerPool[j].attacking){
-              if(
-                (getLED(playerPool[j].pos+(ATTACK_WIDTH/2)) >= getLED(spawnPool[s]._pos) && getLED(playerPool[j].pos+(ATTACK_WIDTH/2)) <= getLED(spawnPool[s]._pos)) ||
-                (getLED(playerPool[j].pos-(ATTACK_WIDTH/2)) <= getLED(spawnPool[s]._pos) && getLED(playerPool[j].pos-(ATTACK_WIDTH/2)) >= getLED(spawnPool[s]._pos))
-              ){
-                 spawnPool[s].Kill();
-                 leds[getLED(spawnPool[s]._pos)] = CRGB(0, 0, 0);
+              if ((abs(playerPool[j].pos - spawnPool[s]._pos)) <= (ATTACK_WIDTH/2)){
+                spawnPool[s].Kill();
+                leds[getLED(spawnPool[s]._pos)] = CRGB(0, 0, 0);
               }
           }
         }
@@ -653,4 +692,34 @@ void screenSaverTick(){
             }
         }
     }
+}
+
+// fusingHues will calculate and output the win level rgb values to display
+void fusingHues() {
+  int p1 = abs(playerPool[0].pos - 0);
+  int p2 = abs(playerPool[1].pos - 1000);
+  if (p1 >= 500) {
+    p1 = 500;
+  }
+  if (p2 >= 500) {
+    p2 = 500;
+  }
+  int n1 = map(p1, 0, 500, 0, 255);
+  int n2 = map(p2, 0, 500, 0, 255);
+
+  if (playerPool[0].r != 0) {
+    playerPool[0].setRGBValues(n1, 0, 0);
+  } else if (playerPool[0].g != 0) {
+    playerPool[0].setRGBValues(0, n1, 0);
+  } else if (playerPool[0].b != 0) {
+    playerPool[0].setRGBValues(0, 0, n1);
+  }
+
+  if (playerPool[1].r != 0) {
+    playerPool[1].setRGBValues(n2, 0, 0);
+  } else if (playerPool[1].g != 0) {
+    playerPool[1].setRGBValues(0, n2, 0);
+  } else if (playerPool[1].b != 0) {
+    playerPool[1].setRGBValues(0, 0, n2);
+  }
 }

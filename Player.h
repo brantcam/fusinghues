@@ -1,7 +1,7 @@
 #include "Arduino.h"
 
 int const MAX_PLAYER_SPEED = 10;   // Max move speed of the player
-int lives = 3;
+int lives = 6;
 
 class Player {
   public:
@@ -12,6 +12,7 @@ class Player {
     bool alive;
     long killTime;
     int startingPos;
+    void setRGBValues(int red, int green, int blue);
 
     // player color
     int r;
@@ -29,3 +30,9 @@ class Player {
 };
 
 Player::Player() {}
+
+void Player::setRGBValues(int red, int green, int blue) {
+  r = red;
+  g = green;
+  b = blue;
+}

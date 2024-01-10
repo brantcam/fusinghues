@@ -14,7 +14,7 @@ long previousMillis = 0;           // Time of the last redraw
 int levelNumber = 0;
 long lastInputTime = 0;
 int const TIMEOUT = 30000;
-int const LEVEL_COUNT = 5;
+int const LEVEL_COUNT = 1;
 iSin isin = iSin();
 
 // JOYSTICK
@@ -23,7 +23,7 @@ int const ATTACK_THRESHOLD = 30000;// The threshold that triggers an attack
 int const JOYSTICK_DEADZONE = 5;   // Angle to ignore
 
 // WOBBLE ATTACK
-int const ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
+int const ATTACK_WIDTH = 80;     // Width of the wobble attack, world is 1000 wide
 int const ATTACK_DURATION = 500; // Duration of a wobble attack (ms)
 int const BOSS_WIDTH = 40;
 
@@ -31,12 +31,11 @@ int const BOSS_WIDTH = 40;
 char* stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
 long stageStartTime;               // Stores the time the stage changed for stages that are time based
 
-// POOLS
-int lifeLEDs[3] = {52, 50, 40};
+int const LIFE_TOTAL = 6; // if changed update in Player.h
 
 int const enemyCount = 10;
 int const particleCount = 40;
 int const spawnCount = 2;
 int const lavaCount = 4;
-int const conveyorCount = 2;
+int const conveyorCount = 4;
 int const playerCount = 2;

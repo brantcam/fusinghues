@@ -19,7 +19,7 @@ class Enemy
 
 void Enemy::Spawn(int pos, int dir, int sp, int wobble){
     _pos = pos;
-    _dir = dir;          // 0 = left, 1 = right
+    _dir = dir;          // -1 = left, 1 = right
     _wobble = wobble;    // 0 = no, >0 = yes, value is width of wobble
     _origin = pos;
     _sp = sp;
@@ -29,7 +29,7 @@ void Enemy::Spawn(int pos, int dir, int sp, int wobble){
 void Enemy::Tick(){
     if(_alive){
         if(_wobble > 0){
-            _pos = _origin + (sin((millis()/3000.0)*_sp)*_wobble);
+            _pos = _origin + ((sin((millis()/3000.0)*_sp)*_wobble)*_dir);
         }else{
             if(_dir == 0){
                 _pos -= _sp;
