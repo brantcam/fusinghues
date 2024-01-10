@@ -219,22 +219,41 @@ void loop() {
             }
         }else if(stage == "COMPLETE"){
             FastLED.clear();
-            if(stageStartTime+500 > mm){
-                int n = max(map(((mm-stageStartTime)), 0, 500, NUM_LEDS, 0), 0);
-                for(int i = NUM_LEDS; i>= n; i--){
-                    brightness = (sin(((i*10)+mm)/500.0)+1)*255;
-                    leds[i].setHSV(brightness, 255, 255);
+            if(stageStartTime+3000 > mm){
+                int n0 = max(map((mm-stageStartTime), 0, 3000, 0, getLED(playerPool[0].pos)), 0); 
+                int n1 = max(map((mm-stageStartTime), 0, 3000, 0, NUM_LEDS-getLED(playerPool[0].pos-1)), 0); 
+  
+                int left = 0;
+                int right = 0;
+                while (left < n0 || right < n1) {
+                  int brightnessLeft = (sin(((left*10)+mm)/500.0)+1)*255;
+                  int brightnessRight = (sin(((right*10)+mm)/500.0)+1)*255;
+                  leds[getLED(playerPool[0].pos)-left].setHSV(brightnessLeft, 255, 255);
+                  leds[getLED(playerPool[0].pos)+right].setHSV(brightnessRight, 255, 255);
+                  if (left < n0) {
+                    left++;
+                  }
+                  if (right < n1) {
+                    right++;
+                  }
                 }
-            }else if(stageStartTime+5000 > mm){
+            }else if(stageStartTime+6000 > mm){
+              // the flow of the sin wave all goes in one direction, but would be cool if they wave on each other
                 for(int i = NUM_LEDS; i>= 0; i--){
                     brightness = (sin(((i*10)+mm)/500.0)+1)*255;
                     leds[i].setHSV(brightness, 255, 255);
                 }
-            }else if(stageStartTime+5500 > mm){
-                int n = max(map(((mm-stageStartTime)), 5000, 5500, NUM_LEDS, 0), 0);
-                for(int i = 0; i< n; i++){
-                    brightness = (sin(((i*10)+mm)/500.0)+1)*255;
-                    leds[i].setHSV(brightness, 255, 255);
+            }else if(stageStartTime+9000 > mm){
+                int n = max(map((mm-stageStartTime), 6000, 9000, NUM_LEDS/2, 0), 0); // 0 -> 1500 ms ====> 0 -> player1.pos
+                for (int i = 0; i < n; i ++) {
+                  brightness = (sin(((i*10)+mm)/500.0)+1)*255;
+                  leds[i].setHSV(brightness, 255, 255);
+                  leds[NUM_LEDS-i-1].setHSV(brightness, 255, 255);
+//
+
+// use this code in GAMEOVER to reset the game
+//                  leds[i+1].setHSV(brightness, 255, 255);
+//                  leds[NUM_LEDS-i-2].setHSV(brightness, 255, 255);
                 }
             }else{
                 nextLevel();
