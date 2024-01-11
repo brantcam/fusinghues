@@ -14,7 +14,7 @@ long previousMillis = 0;           // Time of the last redraw
 int levelNumber = 0;
 long lastInputTime = 0;
 int const TIMEOUT = 30000;
-int const LEVEL_COUNT = 1;
+int const LEVEL_COUNT = 5;
 iSin isin = iSin();
 
 // JOYSTICK
@@ -31,8 +31,8 @@ int const BOSS_WIDTH = 40;
 char* stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
 long stageStartTime;               // Stores the time the stage changed for stages that are time based
 
-//int const LIFE_TOTAL = 6; // if changed update in Player.h
-int const LIFE_TOTAL = 1;
+int const LIFE_TOTAL = 6; // if changed update in Player.h
+//int const LIFE_TOTAL = 1;
 
 int const enemyCount = 10;
 int const particleCount = 40;

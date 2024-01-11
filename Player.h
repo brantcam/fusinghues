@@ -1,8 +1,8 @@
 #include "Arduino.h"
 
 int const MAX_PLAYER_SPEED = 10;   // Max move speed of the player
-//int lives = 6;
-int lives = 1;
+int lives = 6;
+//int lives = 1;
 
 class Player {
   public:

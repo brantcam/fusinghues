@@ -262,6 +262,19 @@ void loop() {
             FastLED.clear();
             stageStartTime = 0;
         }
+
+//        // color pallette
+//        // water
+//        leds[140] = CRGB(0, 0, 5);
+//        // water new
+//        leds[142] = CRGB(1, 6, 13);
+//        // lava
+//        leds[144] = CRGB(150, 100, 0);
+//        leds[146].setHSV(69, 255, 255);
+//        leds[148].setHSV(220, 255, 255);
+//        leds[150] = CRGB(255, 0, 0);
+//        leds[152] = CRGB(0, 255, 0);
+//        leds[154] = CRGB(0, 0, 255);
         
         Serial.print(millis()-mm);
         Serial.print(" - ");
@@ -294,77 +307,52 @@ void loadLevel(){
             spawnEnemy(300, -1, 1, 50);
             spawnEnemy(600, 1, 1, 50);
             break;
-//        case 2:
-//            playerPool[0].setRGBValues(0, 255, 0);
-//            playerPool[1].setRGBValues(0, 0, 255);
-//            spawnLava(100, 200, 2000, 2000, 0, "OFF");
-//            spawnLava(300, 400, 2000, 2000, 0, "ON");
-//            spawnEnemy(475, -1, 2, 50);
-//            spawnEnemy(525, 1, 2, 50);
-//            spawnLava(600, 700, 2000, 2000, 0, "ON");
-//            spawnLava(800, 900, 2000, 2000, 0, "OFF");
-//            break;
-//        case 3:
-//            playerPool[0].setRGBValues(255, 0, 0);
-//            playerPool[1].setRGBValues(0, 255, 0);
-//            spawnConveyor(100, 300, 1);
-//
-//            spawnPool[0].Spawn(450, 3000, 2, 0, 0);
-//            spawnPool[1].Spawn(550, 3000, 2, 1, 0);
-//
-//            spawnConveyor(700, 900, -1);
-//            break;
-//        case 4:
-//            playerPool[0].setRGBValues(0, 0, 255);
-//            playerPool[1].setRGBValues(255, 0, 0);
-//            spawnConveyor(25, 100, 1);
-//            spawnLava(100, 150, 2000, 2000, 0, "ON");
-//            spawnPool[0].Spawn(275, 3000, 5, 0, 0);
-//            spawnConveyor(300, 400, 1);
-//
-//            spawnLava(400, 600, 2000, 2000, 0, "OFF");
-//
-//            spawnConveyor(600, 700, -1);
-//            spawnPool[1].Spawn(725, 3000, 5, 1, 0);
-//            spawnLava(850, 900, 2000, 2000, 0, "ON");
-//            spawnConveyor(900, 975, -1);
-//            break;
-//        case 5:
-//            playerPool[0].setRGBValues(255, 0, 0);
-//            playerPool[1].setRGBValues(0, 255, 0);
-//            
-//            break;
-//        case 5:
+        case 2:
+            playerPool[0].setRGBValues(0, 255, 0);
+            playerPool[1].setRGBValues(0, 0, 255);
+            spawnLava(100, 200, 2000, 2000, 0, "OFF");
+            spawnLava(300, 400, 2000, 2000, 0, "ON");
+            spawnEnemy(475, -1, 2, 50);
+            spawnEnemy(525, 1, 2, 50);
+            spawnLava(600, 700, 2000, 2000, 0, "ON");
+            spawnLava(800, 900, 2000, 2000, 0, "OFF");
+            break;
+        case 3:
+            playerPool[0].setRGBValues(255, 0, 0);
+            playerPool[1].setRGBValues(0, 255, 0);
+            spawnConveyor(100, 300, 1);
+
+            spawnPool[0].Spawn(450, 3000, 2, 0, 0);
+            spawnPool[1].Spawn(550, 3000, 2, 1, 0);
+
+            spawnConveyor(700, 900, -1);
+            break;
+        case 4:
+            playerPool[0].setRGBValues(0, 0, 255);
+            playerPool[1].setRGBValues(255, 0, 0);
+            spawnConveyor(25, 100, 1);
+            spawnLava(100, 150, 2000, 2000, 0, "ON");
+            spawnPool[0].Spawn(275, 3000, 5, 0, 0);
+            spawnConveyor(300, 400, 1);
+
+            spawnLava(400, 600, 2000, 2000, 0, "OFF");
+
+            spawnConveyor(600, 700, -1);
+            spawnPool[1].Spawn(725, 3000, 5, 1, 0);
+            spawnLava(850, 900, 2000, 2000, 0, "ON");
+            spawnConveyor(900, 975, -1);
+            break;
+        case 5:
+            playerPool[0].setRGBValues(255, 0, 0);
+            playerPool[1].setRGBValues(0, 255, 0);
+            
+            break;
+//        case 0:
 //            // boss level
-////            spawnConveyor(100, 600, -1);
-////            spawnEnemy(800, 0, 0, 0);
-//            break;
-//        case 6:
-//            // Conveyor of enemies
-//            spawnConveyor(50, 1000, 1);
-//            spawnEnemy(300, 0, 0, 0);
-//            spawnEnemy(400, 0, 0, 0);
-//            spawnEnemy(500, 0, 0, 0);
-//            spawnEnemy(600, 0, 0, 0);
-//            spawnEnemy(700, 0, 0, 0);
-//            spawnEnemy(800, 0, 0, 0);
-//            spawnEnemy(900, 0, 0, 0);
-//            break;
-//        case 7:
-//            // Lava run
-//            spawnLava(195, 300, 2000, 2000, 0, "OFF");
-//            spawnLava(350, 455, 2000, 2000, 0, "OFF");
-//            spawnLava(510, 610, 2000, 2000, 0, "OFF");
-//            spawnLava(660, 760, 2000, 2000, 0, "OFF");
-//            spawnPool[0].Spawn(1000, 3800, 4, 0, 0);
-//            break;
-//        case 8:
-//            // Sin enemy #2
-//            spawnEnemy(700, 1, 7, 275);
-//            spawnEnemy(500, 1, 5, 250);
-//            spawnPool[0].Spawn(1000, 5500, 4, 0, 3000);
-//            spawnPool[1].Spawn(0, 5500, 5, 1, 10000);
-//            spawnConveyor(100, 900, -1);
+//            playerPool[0].setRGBValues(255, 0, 0);
+//            playerPool[1].setRGBValues(0, 255, 0);
+//            spawnPool[0].Spawn(450, 3000, 2, 0, 0);
+//            spawnLava(600, 700, 2000, 2000, 0, "ON");
 //            break;
 //        case 9:
 //            // Boss
@@ -487,7 +475,7 @@ void tickEnemies(){
             }
             // Draw (if still alive)
             if(enemyPool[i].Alive()) {
-                leds[getLED(enemyPool[i]._pos)] = CRGB(255, 0, 0);
+                leds[getLED(enemyPool[i]._pos)].setHSV(200, 255, 255);
             }
             // Hit player(s)?
             for (int j = 0; j < playerCount; j ++) {
@@ -568,7 +556,7 @@ void tickSpawners(){
     long mm = millis();
     for(int s = 0; s<spawnCount; s++){
         if (spawnPool[s].Alive()) {
-          leds[getLED(spawnPool[s]._pos)] = CRGB(238, 130, 238);
+          leds[getLED(spawnPool[s]._pos)].setHSV(220, 255, 255);
         }
         if(spawnPool[s].Alive() && spawnPool[s]._activate < mm){
             if(spawnPool[s]._lastSpawned + spawnPool[s]._rate < mm || spawnPool[s]._lastSpawned == 0){
@@ -651,11 +639,11 @@ void tickConveyors(){
             ss = getLED(conveyorPool[i]._startPoint);
             ee = getLED(conveyorPool[i]._endPoint);
             for(led = ss; led<ee; led++){
-                b = 5;
+                b = 8;
                 n = (-led + (m/100)) % 5;
                 if(dir == -1) n = (led + (m/100)) % 5;
                 b = (5-n)/2.0;
-                if(b > 0) leds[led] = CRGB(0, 0, b);
+                if(b > 0) leds[led] = CRGB(1, 2, b);
             }
 
             for (int j = 0; j < playerCount; j ++) {
