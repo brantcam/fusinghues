@@ -31,7 +31,8 @@ int const BOSS_WIDTH = 40;
 char* stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
 long stageStartTime;               // Stores the time the stage changed for stages that are time based
 
-int const LIFE_TOTAL = 6; // if changed update in Player.h
+//int const LIFE_TOTAL = 6; // if changed update in Player.h
+int const LIFE_TOTAL = 1;
 
 int const enemyCount = 10;
 int const particleCount = 40;

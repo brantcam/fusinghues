@@ -135,31 +135,20 @@ void loop() {
               }
             }
             FastLED.clear();
-            leds[146] = CRGB(255, 40, 0);
-            leds[147] = CRGB(255, 80, 0);
-            leds[148] = CRGB(255, 108, 0);
-            leds[149] = CRGB(255, 118, 0);
-            leds[150] = CRGB(255, 128, 0);
-            leds[151] = CRGB(255, 255, 0);
-            leds[152] = CRGB(128, 255, 0);
-            leds[153] = CRGB(118, 255, 0);
-            leds[154] = CRGB(108, 255, 0);
-            leds[154] = CRGB(80, 255, 0);
-            leds[155] = CRGB(40, 255, 0);
-            leds[getLED(400)] = CRGB(255, 255, 255);
-            leds[getLED(600)] = CRGB(255, 255, 255);
             tickConveyors();
             tickSpawners();
             tickBoss();
             tickLava();
             tickEnemies();
             
+            drawPlayer0();
+            drawPlayer1();
             for (int i = 0; i < playerCount; i ++) {
-              drawPlayer(playerPool[i]);
+//              drawPlayer(playerPool[i], joystickPool[i]);
               drawAttack(playerPool[i]);
             }
             // this is a condition for the last level, it needs to make rainbows, set this value to the last level
-            if (levelNumber == 1) {
+            if (levelNumber == 5) {
               leds[getLED(playerPool[0].pos)].setHSV(0, 255, 255);
               leds[getLED(playerPool[1].pos)].setHSV(0, 255, 255);
 
@@ -173,8 +162,17 @@ void loop() {
         }else if(stage == "DEAD"){
             // DEAD
             FastLED.clear();
-            if(!tickParticles()){
-                loadLevel();
+            if (!tickParticles()) {
+              // do nothing
+            } else if (stageStartTime+1500 > mm) {
+              int n = max(map((mm-stageStartTime), 0, 1500, NUM_LEDS/2, 0), 0); // 0 -> 1500 ms ====> 0 -> player1.pos
+              for (int i = 0; i < n; i ++) {
+                brightness = (sin(((i*10)+mm)/500.0)+1)*30;
+                leds[i+1].setHSV(brightness, 255, 255);
+                leds[NUM_LEDS-i-1].setHSV(brightness, 255, 255);
+              }
+            } else {
+              loadLevel();
             }
         }else if(stage == "WIN"){
             // LEVEL COMPLETE
@@ -226,8 +224,8 @@ void loop() {
                 int left = 0;
                 int right = 0;
                 while (left < n0 || right < n1) {
-                  int brightnessLeft = (sin(((left*10)+mm)/500.0)+1)*255;
-                  int brightnessRight = (sin(((right*10)+mm)/500.0)+1)*255;
+                  int brightnessLeft = (sin(((-left*10)+mm)/500.0)+1)*255;
+                  int brightnessRight = (sin(((-right*10)+mm)/500.0)+1)*255;
                   leds[getLED(playerPool[0].pos)-left].setHSV(brightnessLeft, 255, 255);
                   leds[getLED(playerPool[0].pos)+right].setHSV(brightnessRight, 255, 255);
                   if (left < n0) {
@@ -243,22 +241,23 @@ void loop() {
                     brightness = (sin(((i*10)+mm)/500.0)+1)*255;
                     leds[i].setHSV(brightness, 255, 255);
                 }
-            }else if(stageStartTime+9000 > mm){
-                int n = max(map((mm-stageStartTime), 6000, 9000, NUM_LEDS/2, 0), 0); // 0 -> 1500 ms ====> 0 -> player1.pos
+            }else if (stageStartTime+9000 > mm) {
+                for(int i = NUM_LEDS; i>= 0; i--){
+                    brightness = (sin(((-i*10)+mm)/500.0)+1)*255;
+                    leds[i].setHSV(brightness, 255, 255);
+                }
+            }else if(stageStartTime+12000 > mm){
+                int n = max(map((mm-stageStartTime), 9000, 12000, NUM_LEDS/2, 0), 0); // 0 -> 1500 ms ====> 0 -> player1.pos
                 for (int i = 0; i < n; i ++) {
                   brightness = (sin(((i*10)+mm)/500.0)+1)*255;
                   leds[i].setHSV(brightness, 255, 255);
                   leds[NUM_LEDS-i-1].setHSV(brightness, 255, 255);
-//
-
-// use this code in GAMEOVER to reset the game
-//                  leds[i+1].setHSV(brightness, 255, 255);
-//                  leds[NUM_LEDS-i-2].setHSV(brightness, 255, 255);
                 }
             }else{
                 nextLevel();
             }
-        }else if(stage == "GAMEOVER"){
+        }
+        else if(stage == "GAMEOVER"){
             // GAME OVER!
             FastLED.clear();
             stageStartTime = 0;
@@ -287,14 +286,14 @@ void loadLevel(){
             playerPool[1].setRGBValues(0, 255, 0);
             
             break;
-//        case 1:
-//            // Slow moving sin enemies
-//            playerPool[0].setRGBValues(0, 0, 255);
-//            playerPool[1].setRGBValues(255, 0, 0);
-//
-//            spawnEnemy(300, -1, 1, 50);
-//            spawnEnemy(600, 1, 1, 50);
-//            break;
+        case 1:
+            // Slow moving sin enemies
+            playerPool[0].setRGBValues(0, 0, 255);
+            playerPool[1].setRGBValues(255, 0, 0);
+
+            spawnEnemy(300, -1, 1, 50);
+            spawnEnemy(600, 1, 1, 50);
+            break;
 //        case 2:
 //            playerPool[0].setRGBValues(0, 255, 0);
 //            playerPool[1].setRGBValues(0, 0, 255);
@@ -330,11 +329,11 @@ void loadLevel(){
 //            spawnLava(850, 900, 2000, 2000, 0, "ON");
 //            spawnConveyor(900, 975, -1);
 //            break;
-        case 1:
-            playerPool[0].setRGBValues(255, 0, 0);
-            playerPool[1].setRGBValues(0, 255, 0);
-            
-            break;
+//        case 5:
+//            playerPool[0].setRGBValues(255, 0, 0);
+//            playerPool[1].setRGBValues(0, 255, 0);
+//            
+//            break;
 //        case 5:
 //            // boss level
 ////            spawnConveyor(100, 600, -1);
@@ -535,8 +534,34 @@ void tickBoss(){
     }
 }
 
-void drawPlayer(Player player){
-    leds[getLED(player.pos)] = CRGB(player.r, player.g, player.b);
+void drawPlayer0(){
+    leds[getLED(playerPool[0].pos)] = CRGB(playerPool[0].r, playerPool[0].g, playerPool[0].b);
+    int moveAmount = (joystickPool[0].tilt/6.0);
+    if (moveAmount > 0) {
+      leds[getLED(playerPool[0].pos)+1] = CRGB(playerPool[0].r/4, playerPool[0].g/4, playerPool[0].b/4);
+      leds[getLED(playerPool[0].pos)+2] = CRGB(playerPool[0].r/8, playerPool[0].g/8, playerPool[0].b/8);
+      leds[getLED(playerPool[0].pos)+3] = CRGB(playerPool[0].r/16, playerPool[0].g/16, playerPool[0].b/16);
+    } else if (moveAmount < 0) {
+      leds[getLED(playerPool[0].pos)-1] = CRGB(playerPool[0].r/4, playerPool[0].g/4, playerPool[0].b/4);
+      leds[getLED(playerPool[0].pos)-2] = CRGB(playerPool[0].r/8, playerPool[0].g/8, playerPool[0].b/8);
+      leds[getLED(playerPool[0].pos)-3] = CRGB(playerPool[0].r/16, playerPool[0].g/16, playerPool[0].b/16);
+    }
+    
+}
+
+void drawPlayer1(){
+    leds[getLED(playerPool[1].pos)] = CRGB(playerPool[1].r, playerPool[1].g, playerPool[1].b);
+    int moveAmount = (joystickPool[1].tilt/6.0);
+    if (moveAmount > 0) {
+      leds[getLED(playerPool[1].pos)+1] = CRGB(playerPool[1].r/4, playerPool[1].g/4, playerPool[1].b/4);
+      leds[getLED(playerPool[1].pos)+2] = CRGB(playerPool[1].r/8, playerPool[1].g/8, playerPool[1].b/8);
+      leds[getLED(playerPool[1].pos)+3] = CRGB(playerPool[1].r/16, playerPool[1].g/16, playerPool[1].b/16);
+    } else if (moveAmount < 0) {
+      leds[getLED(playerPool[1].pos)-1] = CRGB(playerPool[1].r/4, playerPool[1].g/4, playerPool[1].b/4);
+      leds[getLED(playerPool[1].pos)-2] = CRGB(playerPool[1].r/8, playerPool[1].g/8, playerPool[1].b/8);
+      leds[getLED(playerPool[1].pos)-3] = CRGB(playerPool[1].r/16, playerPool[1].g/16, playerPool[1].b/16);
+    }
+    
 }
 
 void tickSpawners(){
@@ -650,7 +675,7 @@ void drawAttack(Player player){
     if(!player.attacking) return;
     int n = map(millis() - player.attackMillis, 0, ATTACK_DURATION, 100, 5);
     for(int i = getLED(player.pos-(ATTACK_WIDTH/2))+1; i<=getLED(player.pos+(ATTACK_WIDTH/2))-1; i++){
-        leds[i] = CRGB(0, 0, n);
+        leds[i] = CRGB(64, 64, 64);
     }
     if(n > 90) {
         n = 255;
@@ -659,8 +684,8 @@ void drawAttack(Player player){
         n = 0;
         leds[getLED(player.pos)] = CRGB(player.r, player.g, player.b);
     }
-    leds[getLED(player.pos-(ATTACK_WIDTH/2))] = CRGB(n, n, 255);
-    leds[getLED(player.pos+(ATTACK_WIDTH/2))] = CRGB(n, n, 255);
+    leds[getLED(player.pos-(ATTACK_WIDTH/2))] = CRGB(player.r, player.g, player.b);
+    leds[getLED(player.pos+(ATTACK_WIDTH/2))] = CRGB(player.r, player.g, player.b);
 }
 
 int getLED(int pos){
